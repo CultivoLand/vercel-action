@@ -64,6 +64,10 @@ The url of deployment preview.
 
 The name of deployment name.
 
+### `deployment-id`
+
+The Vercel deployment ID.
+
 ## How To Use
 
 ### Disable Vercel for GitHub
