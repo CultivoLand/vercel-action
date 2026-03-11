@@ -220,8 +220,12 @@ async function vercelInspect(deploymentUrl) {
   }
   await exec.exec('npx', args, options)
 
-  const nameMatch = myError.match(/^\s+name\s+(.+)$/m)
-  const idMatch = myError.match(/^\s+id\s+(dpl_\S+)$/m)
+  return parseInspectOutput(myError)
+}
+
+function parseInspectOutput(output) {
+  const nameMatch = output.match(/^\s+name\s+(.+)$/m)
+  const idMatch = output.match(/^\s+id\s+(dpl_\S+)$/m)
   return {
     name: nameMatch && nameMatch.length ? nameMatch[1] : null,
     id: idMatch && idMatch.length ? idMatch[1] : null,
@@ -509,3 +513,5 @@ async function run() {
 run().catch((error) => {
   core.setFailed(error.message)
 })
+
+module.exports = { parseInspectOutput }
