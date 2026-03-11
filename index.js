@@ -220,8 +220,12 @@ async function vercelInspect(deploymentUrl) {
   }
   await exec.exec('npx', args, options)
 
-  const match = myError.match(/^\s+name\s+(.+)$/m)
-  return match && match.length ? match[1] : null
+  const nameMatch = myError.match(/^\s+name\s+(.+)$/m)
+  const idMatch = myError.match(/^\s+id\s+(dpl_\S+)$/m)
+  return {
+    name: nameMatch && nameMatch.length ? nameMatch[1] : null,
+    id: idMatch && idMatch.length ? idMatch[1] : null,
+  }
 }
 
 async function findCommentsForEvent() {
@@ -464,14 +468,22 @@ async function run() {
     core.warning('get preview-url error')
   }
 
-  const deploymentName
-    = vercelProjectName || (await vercelInspect(deploymentUrl))
+  const inspectResult = deploymentUrl ? await vercelInspect(deploymentUrl) : { name: null, id: null }
+  const deploymentName = vercelProjectName || inspectResult.name
   if (deploymentName) {
     core.info('set preview-name output')
     core.setOutput('preview-name', deploymentName)
   }
   else {
     core.warning('get preview-name error')
+  }
+
+  if (inspectResult.id) {
+    core.info('set deployment-id output')
+    core.setOutput('deployment-id', inspectResult.id)
+  }
+  else {
+    core.warning('get deployment-id error')
   }
 
   if (aliasDomains.length) {

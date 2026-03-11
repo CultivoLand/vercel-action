@@ -64,6 +64,8 @@ outputs:
     description: deployment preview URL
   preview-name:
     description: deployment preview name
+  deployment-id:
+    description: Vercel deployment ID
 runs:
   using: node20
   main: dist/index.js
