@@ -61,9 +61,11 @@ inputs:
 
 outputs:
   preview-url:
-    description: 'deployment preview URL'
+    description: deployment preview URL
   preview-name:
-    description: 'deployment preview name'
+    description: deployment preview name
+  deployment-id:
+    description: Vercel deployment ID
 runs:
   using: 'node16'
   main: 'dist/index.js'
